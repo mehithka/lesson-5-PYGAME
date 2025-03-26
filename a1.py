@@ -68,7 +68,7 @@ over_font = pygame.font.Font('freesansbold.ttf',64)
 
 def show_score(x,y):
     #displaying current score to the screen
-    score = dont.render('Score : '+str(score_value), True,(255,255,255))
+    score = font.render('Score : '+str(score_value), True,(255,255,255))
     screen.bilt(score,(x,y))
 
 def game_over_text():
@@ -79,4 +79,53 @@ def game_over_text():
 def player(x,y):
     #Draw the player on the screen
     screen.blit(playerImg,(x,y))
-    
+
+def enemy(x , y , i):
+    screen.blit(enemyImg[i],(x,y))
+
+def fire_bullet(x,y):
+    global bullet_state
+    bullet_state = 'fire'
+    screen.blit(bulletImg, (x+16 , y+10))
+
+def isCollision(enemyX,enemyY , bulletX,bulletY):
+    distance = math.sqrt((enemyX-bulletX)**2 + (enemyY - bulletY)**2)
+
+#game LOOP
+running =  True
+while running:
+    screen.fill((0,0,0))
+    screen.blit(background,(0,0))
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running  == False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                playerX_change = -5
+            if event.type == pygame.K_RIGHT:
+                playerX_change = 5
+            if event.key == pygame.K_SPACE and bullet_state == 'ready':
+                bulletX = playerX
+                fire_bullet(bulletX,bulletY)
+        if event .type == pygame.KEYUP and event.key in [pygame.K_LEFT,pygame.K_RIGHT]:
+            playerX_change = 0
+
+    #player movement
+    playerX += playerX_change
+    playerX -  max(0,min(playerX,SCREEN_WIDTH - 64))
+
+    #enemy movemnt
+    for i in range(num_of_enemies):
+        if enemyY[i]>340:#gameover condition
+            for j in range(num_of_enemies):
+                enemyY[j] == 2000
+                game_over_text()
+                break
+        enemyX[i]+= enemyX_change[i]
+        if enemyX[i]<= 0 or enemyX[i]>= SCREEN_WIDTH-64:
+            enemyX_change[i]+= -1
+            enemyY[i]+= enemyY_change[i]
+        
+        #CCollision CHECCK
+        if isCollision(enemyX[i],)
